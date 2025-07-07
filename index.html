@@ -55,6 +55,19 @@
       transform: translateX(-50%);
       font-size: 1.2rem;
     }
+    #timer {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #aa3366;
+      background: #fcefff;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 2px solid #e0b0c7;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
     label {
       font-weight: bold;
       display: block;
@@ -127,6 +140,7 @@
 </head>
 <body>
   <div class="container">
+    <div id="timer">00:00</div>
     <div class="lux-title">💎 KeyPerfect Typing 💎</div>
 
     <label for="source">Custom Text to Practice:</label>
@@ -151,13 +165,30 @@
     const overlay = document.getElementById("overlay");
     const bling = document.getElementById("blingSound");
     const wpmDisplay = document.getElementById("wpmDisplay");
+    const timerDisplay = document.getElementById("timer");
 
     let startTime = null;
+    let timerInterval = null;
+
+    function formatTime(seconds) {
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      startTime = Date.now();
+      timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        timerDisplay.textContent = formatTime(elapsed);
+      }, 1000);
+    }
 
     function checkMatch() {
       const source = sourceBox.value;
       const input = inputBox.value;
-      if (!startTime) startTime = Date.now();
+      if (!startTime) startTimer();
 
       let html = "";
       let firstErrorIndex = -1;
@@ -191,6 +222,9 @@
       inputBox.value = "";
       overlay.innerHTML = "";
       wpmDisplay.textContent = "Typing speed: 0 WPM";
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerDisplay.textContent = "00:00";
       startTime = null;
     }
   </script>
