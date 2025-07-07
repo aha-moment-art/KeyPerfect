@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Georgia', serif;
-      background-image: linear-gradient(to bottom right, #fff8f5, #fdeff4);
+      background-image: linear-gradient(to bottom right, #e0f7f1, #e8e0f9);
       background-attachment: fixed;
       margin: 0;
       padding: 2rem;
@@ -61,15 +61,12 @@
       margin-top: 1.5rem;
       color: #444;
     }
-    textarea, pre {
+    textarea {
       width: 100%;
       font-family: 'Courier New', monospace;
       font-size: 1.1rem;
       line-height: 1.7;
       margin-top: 0.5rem;
-      background: #fefefe;
-    }
-    textarea {
       padding: 1.2rem;
       border: 1px solid #e1cfc7;
       border-radius: 0.75rem;
@@ -77,30 +74,15 @@
       resize: vertical;
       min-height: 200px;
     }
-    #preview {
-      white-space: pre-wrap;
-      padding: 1.2rem;
-      border: 1px dashed #ccc;
-      border-radius: 0.75rem;
-      background-color: #fffdfd;
-      margin-top: 1rem;
-      min-height: 200px;
-    }
-    .correct { color: #3c8c5c; }
-    .incorrect { color: #c53a3a; }
-    #result {
-      margin-top: 1.5rem;
-      font-weight: bold;
-      text-align: center;
-      color: #533c2d;
-      font-size: 1.6rem;
-      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-    }
     .lux-icons {
       text-align: center;
       margin-top: 2.5rem;
       font-size: 1.5rem;
       font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+    .highlight {
+      background-color: #ffdddd;
+      border: 2px solid #ff9999;
     }
   </style>
 </head>
@@ -114,35 +96,27 @@
     <label for="input">Start Typing:</label>
     <textarea id="input" rows="8" placeholder="Type here..." oninput="checkMatch()"></textarea>
 
-    <pre id="preview"></pre>
-
-    <p id="result"></p>
-
     <div class="lux-icons">👜 💍 💄 👑 🧴 🧵 💎 ✨</div>
   </div>
 
   <script>
     function checkMatch() {
       const source = document.getElementById("source").value;
-      const input = document.getElementById("input").value;
-      const preview = document.getElementById("preview");
-      const result = document.getElementById("result");
+      const inputBox = document.getElementById("input");
+      const input = inputBox.value;
 
-      let output = "";
-      for (let i = 0; i < source.length; i++) {
-        const char = source[i];
-        if (i < input.length) {
-          output += `<span class="${input[i] === char ? 'correct' : 'incorrect'}">${char}</span>`;
-        } else {
-          output += `<span>${char}</span>`;
+      let hasError = false;
+      for (let i = 0; i < input.length; i++) {
+        if (input[i] !== source[i]) {
+          hasError = true;
+          break;
         }
       }
-      preview.innerHTML = output;
 
-      if (input === source) {
-        result.textContent = "👜💄💍 All matched! You typed with luxury precision.";
+      if (hasError) {
+        inputBox.classList.add("highlight");
       } else {
-        result.textContent = "";
+        inputBox.classList.remove("highlight");
       }
     }
   </script>
