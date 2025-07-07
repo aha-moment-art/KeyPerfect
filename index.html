@@ -99,7 +99,30 @@
       overflow: hidden;
     }
     .char-ok { color: black; }
-    .char-err { background-color: #ffcccc; color: #900; border-radius: 2px; }
+    .char-err {
+      background-color: #ffcccc;
+      color: #900;
+      border-radius: 2px;
+      animation: fadein 0.3s ease;
+    }
+    @keyframes fadein {
+      from { background-color: transparent; }
+      to { background-color: #ffcccc; }
+    }
+    #wpmDisplay {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 1.3rem;
+      color: #444;
+    }
+    #resetBtn {
+      display: block;
+      margin: 2rem auto 0;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -115,6 +138,9 @@
       <textarea id="input" rows="8" placeholder="Type here..." oninput="checkMatch()"></textarea>
     </div>
 
+    <div id="wpmDisplay">Typing speed: 0 WPM</div>
+    <button id="resetBtn" onclick="resetTyping()">🧴</button>
+
     <div class="lux-icons">👜 💍 💄 👑 🧴 🧵 💎 ✨</div>
     <audio id="blingSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_682c4e6a7e.mp3"></audio>
   </div>
@@ -124,10 +150,15 @@
     const inputBox = document.getElementById("input");
     const overlay = document.getElementById("overlay");
     const bling = document.getElementById("blingSound");
+    const wpmDisplay = document.getElementById("wpmDisplay");
+
+    let startTime = null;
 
     function checkMatch() {
       const source = sourceBox.value;
       const input = inputBox.value;
+      if (!startTime) startTime = Date.now();
+
       let html = "";
       let firstErrorIndex = -1;
       for (let i = 0; i < source.length; i++) {
@@ -149,6 +180,18 @@
         inputBox.scrollTop = scrollOffset;
         bling.play();
       }
+
+      const elapsed = (Date.now() - startTime) / 1000 / 60;
+      const words = input.trim().split(/\s+/).length;
+      const wpm = Math.round(words / elapsed);
+      wpmDisplay.textContent = `Typing speed: ${isNaN(wpm) ? 0 : wpm} WPM`;
+    }
+
+    function resetTyping() {
+      inputBox.value = "";
+      overlay.innerHTML = "";
+      wpmDisplay.textContent = "Typing speed: 0 WPM";
+      startTime = null;
     }
   </script>
 </body>
