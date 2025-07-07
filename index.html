@@ -13,11 +13,11 @@
       padding: 2rem;
     }
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       background: white;
-      padding: 2.5rem;
-      border-radius: 1rem;
+      padding: 3rem;
+      border-radius: 1.5rem;
       box-shadow: 0 20px 60px rgba(0,0,0,0.1);
       position: relative;
       background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Chanel_logo_interlocking_cs.svg/512px-Chanel_logo_interlocking_cs.svg.png');
@@ -25,12 +25,35 @@
       background-position: bottom right;
       background-size: 80px;
     }
-    h1 {
-      font-size: 2rem;
+    .lux-title {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      padding: 1.2rem 3rem;
+      border-radius: 50px;
+      background-color: #fff8f1;
       font-weight: bold;
-      color: #111;
+      font-size: 1.8rem;
+      color: #4b2e2e;
+      border: 3px dashed #e1cfc7;
+      font-family: 'Georgia', serif;
+    }
+    .lux-title::before {
+      content: "👜 💍 💄 👑 🧴 🧵 💎 ✨ ";
+      position: absolute;
+      top: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+    }
+    .lux-title::after {
+      content: " 👜 💍 💄 👑 🧴 🧵 💎 ✨";
+      position: absolute;
+      bottom: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
     }
     label {
       font-weight: bold;
@@ -41,39 +64,41 @@
     textarea, pre {
       width: 100%;
       font-family: 'Courier New', monospace;
-      font-size: 1rem;
-      line-height: 1.6;
+      font-size: 1.1rem;
+      line-height: 1.7;
       margin-top: 0.5rem;
       background: #fefefe;
     }
     textarea {
-      padding: 1rem;
+      padding: 1.2rem;
       border: 1px solid #e1cfc7;
-      border-radius: 0.5rem;
+      border-radius: 0.75rem;
       background-color: #fff9f5;
       resize: vertical;
+      min-height: 200px;
     }
     #preview {
       white-space: pre-wrap;
-      padding: 1rem;
+      padding: 1.2rem;
       border: 1px dashed #ccc;
-      border-radius: 0.5rem;
+      border-radius: 0.75rem;
       background-color: #fffdfd;
       margin-top: 1rem;
+      min-height: 200px;
     }
     .correct { color: #3c8c5c; }
     .incorrect { color: #c53a3a; }
     #result {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       font-weight: bold;
       text-align: center;
       color: #533c2d;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
     }
     .lux-icons {
       text-align: center;
-      margin-top: 2rem;
+      margin-top: 2.5rem;
       font-size: 1.5rem;
       font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
     }
@@ -81,12 +106,13 @@
 </head>
 <body>
   <div class="container">
-    <h1>💎 KeyPerfect Typing</h1>
+    <div class="lux-title">💎 KeyPerfect Typing 💎</div>
+
     <label for="source">Custom Text to Practice:</label>
-    <textarea id="source" rows="6">The quick brown fox jumps over the lazy dog.</textarea>
+    <textarea id="source" rows="8">The quick brown fox jumps over the lazy dog.</textarea>
 
     <label for="input">Start Typing:</label>
-    <textarea id="input" rows="6" placeholder="Type here..." oninput="checkMatch()"></textarea>
+    <textarea id="input" rows="8" placeholder="Type here..." oninput="checkMatch()"></textarea>
 
     <pre id="preview"></pre>
 
