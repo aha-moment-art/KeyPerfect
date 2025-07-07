@@ -73,6 +73,8 @@
       background-color: #fff9f5;
       resize: vertical;
       min-height: 200px;
+      position: relative;
+      z-index: 1;
     }
     .lux-icons {
       text-align: center;
@@ -80,10 +82,24 @@
       font-size: 1.5rem;
       font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
     }
-    .highlight {
-      background-color: #ffdddd;
-      border: 2px solid #ff9999;
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 1.2rem;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      white-space: pre-wrap;
+      color: transparent;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      border-radius: 0.75rem;
+      overflow: hidden;
     }
+    .char-ok { color: black; }
+    .char-err { background-color: #ffcccc; color: #900; border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -94,29 +110,44 @@
     <textarea id="source" rows="8">The quick brown fox jumps over the lazy dog.</textarea>
 
     <label for="input">Start Typing:</label>
-    <textarea id="input" rows="8" placeholder="Type here..." oninput="checkMatch()"></textarea>
+    <div style="position: relative;">
+      <div id="overlay"></div>
+      <textarea id="input" rows="8" placeholder="Type here..." oninput="checkMatch()"></textarea>
+    </div>
 
     <div class="lux-icons">👜 💍 💄 👑 🧴 🧵 💎 ✨</div>
+    <audio id="blingSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_682c4e6a7e.mp3"></audio>
   </div>
 
   <script>
-    function checkMatch() {
-      const source = document.getElementById("source").value;
-      const inputBox = document.getElementById("input");
-      const input = inputBox.value;
+    const sourceBox = document.getElementById("source");
+    const inputBox = document.getElementById("input");
+    const overlay = document.getElementById("overlay");
+    const bling = document.getElementById("blingSound");
 
-      let hasError = false;
-      for (let i = 0; i < input.length; i++) {
-        if (input[i] !== source[i]) {
-          hasError = true;
-          break;
+    function checkMatch() {
+      const source = sourceBox.value;
+      const input = inputBox.value;
+      let html = "";
+      let firstErrorIndex = -1;
+      for (let i = 0; i < source.length; i++) {
+        if (i < input.length) {
+          if (input[i] === source[i]) {
+            html += `<span class='char-ok'>${source[i]}</span>`;
+          } else {
+            html += `<span class='char-err'>${source[i]}</span>`;
+            if (firstErrorIndex === -1) firstErrorIndex = i;
+          }
+        } else {
+          html += `<span>${source[i]}</span>`;
         }
       }
+      overlay.innerHTML = html;
 
-      if (hasError) {
-        inputBox.classList.add("highlight");
-      } else {
-        inputBox.classList.remove("highlight");
+      if (firstErrorIndex !== -1) {
+        const scrollOffset = Math.floor(firstErrorIndex / 80) * 24;
+        inputBox.scrollTop = scrollOffset;
+        bling.play();
       }
     }
   </script>
