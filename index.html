@@ -127,6 +127,18 @@
       margin-top: 1.5rem;
       font-size: 1.3rem;
       color: #444;
+      transition: all 0.3s ease;
+    }
+    #wpmDisplay.gold {
+      color: #d4af37;
+      font-weight: bold;
+      text-shadow: 0 0 5px #d4af37;
+    }
+    #wpmHigh {
+      text-align: center;
+      font-size: 1rem;
+      color: #888;
+      margin-top: 0.2rem;
     }
     #resetBtn {
       display: block;
@@ -153,6 +165,7 @@
     </div>
 
     <div id="wpmDisplay">Typing speed: 0 WPM</div>
+    <div id="wpmHigh">Highest speed: 0 WPM</div>
     <button id="resetBtn" onclick="resetTyping()">🧴</button>
 
     <div class="lux-icons">👜 💍 💄 👑 🧴 🧵 💎 ✨</div>
@@ -165,10 +178,12 @@
     const overlay = document.getElementById("overlay");
     const bling = document.getElementById("blingSound");
     const wpmDisplay = document.getElementById("wpmDisplay");
+    const wpmHigh = document.getElementById("wpmHigh");
     const timerDisplay = document.getElementById("timer");
 
     let startTime = null;
     let timerInterval = null;
+    let maxWPM = 0;
 
     function formatTime(seconds) {
       const m = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -221,17 +236,28 @@
       const words = input ? input.split(/\s+/).length : 0;
       const elapsedMinutes = (Date.now() - startTime) / 1000 / 60;
       const wpm = Math.round(words / elapsedMinutes);
-      wpmDisplay.textContent = `Typing speed: ${isNaN(wpm) ? 0 : wpm} WPM`;
+      const wpmValue = isNaN(wpm) ? 0 : wpm;
+
+      wpmDisplay.textContent = `Typing speed: ${wpmValue} WPM`;
+      wpmDisplay.classList.toggle("gold", wpmValue >= 80);
+
+      if (wpmValue > maxWPM) {
+        maxWPM = wpmValue;
+        wpmHigh.textContent = `Highest speed: ${maxWPM} WPM`;
+      }
     }
 
     function resetTyping() {
       inputBox.value = "";
       overlay.innerHTML = "";
       wpmDisplay.textContent = "Typing speed: 0 WPM";
+      wpmHigh.textContent = "Highest speed: 0 WPM";
+      wpmDisplay.classList.remove("gold");
       clearInterval(timerInterval);
       timerInterval = null;
       timerDisplay.textContent = "00:00";
       startTime = null;
+      maxWPM = 0;
     }
   </script>
 </body>
