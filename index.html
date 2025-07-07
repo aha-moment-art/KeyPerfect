@@ -180,8 +180,10 @@
       if (timerInterval) return;
       startTime = Date.now();
       timerInterval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
-        timerDisplay.textContent = formatTime(elapsed);
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - startTime) / 1000);
+        timerDisplay.textContent = formatTime(elapsedSeconds);
+        updateWPM();
       }, 1000);
     }
 
@@ -211,10 +213,14 @@
         inputBox.scrollTop = scrollOffset;
         bling.play();
       }
+    }
 
-      const elapsed = (Date.now() - startTime) / 1000 / 60;
-      const words = input.trim().split(/\s+/).length;
-      const wpm = Math.round(words / elapsed);
+    function updateWPM() {
+      if (!startTime) return;
+      const input = inputBox.value.trim();
+      const words = input ? input.split(/\s+/).length : 0;
+      const elapsedMinutes = (Date.now() - startTime) / 1000 / 60;
+      const wpm = Math.round(words / elapsedMinutes);
       wpmDisplay.textContent = `Typing speed: ${isNaN(wpm) ? 0 : wpm} WPM`;
     }
 
