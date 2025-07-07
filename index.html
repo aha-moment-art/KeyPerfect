@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typing Practice Tool</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    textarea, pre {
+      width: 100%;
+      font-family: monospace;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-top: 1rem;
+    }
+    textarea {
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+    }
+    .correct { color: green; }
+    .incorrect { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Typing Practice Tool</h1>
+    <label for="source">Custom Text to Practice:</label>
+    <textarea id="source" rows="6">The quick brown fox jumps over the lazy dog.</textarea>
+
+    <label for="input">Start Typing:</label>
+    <textarea id="input" rows="6" placeholder="Type here..." oninput="checkMatch()"></textarea>
+
+    <pre id="preview"></pre>
+
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function checkMatch() {
+      const source = document.getElementById("source").value;
+      const input = document.getElementById("input").value;
+      const preview = document.getElementById("preview");
+      const result = document.getElementById("result");
+
+      let output = "";
+      for (let i = 0; i < source.length; i++) {
+        const char = source[i];
+        if (i < input.length) {
+          output += `<span class="${input[i] === char ? 'correct' : 'incorrect'}">${char}</span>`;
+        } else {
+          output += `<span>${char}</span>`;
+        }
+      }
+      preview.innerHTML = output;
+
+      if (input === source) {
+        result.textContent = "✅ All matched! Well done.";
+      } else {
+        result.textContent = "";
+      }
+    }
+  </script>
+</body>
+</html>
